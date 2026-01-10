@@ -1,1 +1,23 @@
-This is my first kubernetes file
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express-deployment
+  labels:
+    app: mongo-express
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+      - name: mongo-express
+        image: mongo-express
+        ports:
+          - containerPort: 8081
+  
