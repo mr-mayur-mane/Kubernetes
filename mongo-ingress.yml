@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: mongo-Ingress
+  namespace: mongo-dev
+spec:
+  rules:
+  - host: mongo-app.com
+    http:
+      paths:
+      - backend:
+          serviceName: mongo-express-Service
+          servicePort: 8081 
