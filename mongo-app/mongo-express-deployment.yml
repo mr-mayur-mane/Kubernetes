@@ -19,3 +19,18 @@ spec:
         image: mongo-express
         ports:
         - containerPort: 8081
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINISTRATOR
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              value: mongo-root-username
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              value: mongo-root-password
+        - name: ME_CONFIG_MONGODB_SERVER
+          value:
+          
+
