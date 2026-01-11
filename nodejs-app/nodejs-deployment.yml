@@ -1,0 +1,22 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: nodejs-deployment
+  labels:
+    app: nodejs
+    namespace: nodejs-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels: 
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs
+        image:  nodejs
+        ports:
+        - containerPort: 8888
