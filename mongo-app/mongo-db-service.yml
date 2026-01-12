@@ -8,6 +8,6 @@ spec:
     matchLabels:
       app: mongo-db
     ports:
-      - protocol: TCP
-        port: 27017
-        targetPort: 27017
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
