@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-express-Service
+  name: mongo-express-service
   namespace: mongo-dev
 
 spec:
