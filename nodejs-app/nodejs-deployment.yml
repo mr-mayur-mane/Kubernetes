@@ -20,3 +20,14 @@ spec:
         image:  nodejs
         ports:
         - containerPort: 8888
+        env:
+        - name: MYSQL_USER
+          valueFrom:
+            name: mysql-secret
+            value: mysql-user
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              value: mysql-password
+        
