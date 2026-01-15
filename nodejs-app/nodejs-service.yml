@@ -4,7 +4,7 @@ metadata:
   name: nodejs-service
 
 spec:
-  type: Loadbalancer
+#  type: Loadbalancer
   selector:
     matchLabels:
       app: nodejs
