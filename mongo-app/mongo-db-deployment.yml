@@ -4,7 +4,7 @@ metadata:
   name: mongo-db-deployment
   namespace: mongo-dev
   labels:
-    apps: mongo-db
+    app: mongo-db
 spec:
   selector:
     matchLabels:

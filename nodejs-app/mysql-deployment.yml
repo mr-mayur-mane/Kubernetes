@@ -2,20 +2,20 @@ apiVersion: app/v1
 kind: Deployment
 metadata:
   name: mysql-deployment
+  namespace: nodejs-prod
   labels:
-    db: mysql
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      db: mysql
-  template:
-    metadata:
-      labels:
-        db: mysql
-    spec:
-      containers:
-      - name: mysql
-        image: mysql
-        ports:
-        - containerPort: 3306
+    app: mysql-db
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: mysql-db
+    template:
+      metadata:
+        labels:
+          app: mysql-db
+      spec:
+        containers:
+        - name: mysql-db
+          image: mysql
+          containerPort: 3306
