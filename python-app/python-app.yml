@@ -25,3 +25,17 @@ spec:
         value:
       - name: POSTGRES_URL
         value:
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+spec:
+  selector:
+    matchLabels:
+      app: python-app
+    ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
