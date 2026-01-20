@@ -41,6 +41,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: python-service
+  labels:
+    app: python-app
 spec:
   selector:
     matchLabels:
@@ -66,16 +68,19 @@ spec:
     metadata:
       labels:
         app: postgres-db
-    containers:
-    - name: postgres-db
-      image: postgres
-      ports:
-      - containerPort: 5432
+    spec:
+      containers:
+      - name: postgres-db
+        image: postgres
+        ports:
+        - containerPort: 5432
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  app: postgres-db
+  name: postgre-service
+  labels:
+    app: postgres-db
 spec:
   selector:
     matchLabels:
