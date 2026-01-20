@@ -20,11 +20,19 @@ spec:
       - containerPort: 8080
       env:
       - name: POSTGRES_USER
-        value:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            value: postgres_user
       - name: POSTGRES_PASSWORD
-        value:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            value: postgres_password
       - name: POSTGRES_URL
-        value:
+        valueFrom:
+          name: postgres-configmap
+          value: 
 
 ---
 apiVersion: v1
@@ -82,5 +90,11 @@ metadata:
 data:
   database_url: postgres-service
 
-
-
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: python-Secret
+data:
+  postgres_user: #######
+  postgres_password: ######
