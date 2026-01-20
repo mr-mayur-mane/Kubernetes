@@ -32,8 +32,9 @@ spec:
               key: postgres_password
         - name: POSTGRES_URL
           valueFrom:
-            name: postgres-configmap
-            value: 
+            configMapKeyRef:
+              name: postgres-configmap
+              value: 
 
 ---
 apiVersion: v1
