@@ -88,7 +88,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: python-configmap
+  name: postgres-configmap
 data:
   database_url: postgres-service
 
@@ -96,7 +96,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: python-Secret
+  name: postgres-secret
 data:
   postgres_user: #######
   postgres_password: ######
