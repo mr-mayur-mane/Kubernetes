@@ -31,4 +31,9 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: mysql-password
+        - name: MYSQL_DATA_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-configmap
+              key: database_url
         
