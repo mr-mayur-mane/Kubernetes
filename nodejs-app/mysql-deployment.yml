@@ -18,4 +18,5 @@ metadata:
         containers:
         - name: mysql-db
           image: mysql
-          containerPort: 3306
+          ports:
+          - containerPort: 3306
