@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: python
-        image: python3.1:latest
+        image: python3.1
         ports:
         - containerPort: 8080
         env:
