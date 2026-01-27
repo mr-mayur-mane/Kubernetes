@@ -24,8 +24,11 @@ spec:
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
+          valueFrom:
+            secretKeyRef:
               name: mysql-secret
-              key: mysql-user
+              key: mydql-user
+          key: mysql-user
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
