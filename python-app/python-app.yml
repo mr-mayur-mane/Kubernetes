@@ -61,7 +61,18 @@ spec:
 
 ---
 apiVersion: v1
-kind: configmap
+kind: Secret
+metadata:
+  name: mysql-secret
+  namespace: python-prod
+type: Opaque
+data:
+  mysql_user: ####
+  mysql_password: ####
+
+---
+apiVersion: v1
+kind: ConfigMap
 metadata:
   name: mysql-configmap
   namespace: python-prod
