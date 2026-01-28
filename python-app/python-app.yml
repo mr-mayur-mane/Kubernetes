@@ -52,8 +52,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    matchLabels:
-      app: python
+    app: python
   ports:
   - protocol: TCP
     port: 3000
