@@ -3,3 +3,34 @@ kind: Namespace
 metadata:
   name: python-prod
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+  namespace: python-prod
+  labels:
+    app: python
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python
+    template:
+      metadata:
+        labels:
+          app: python
+    spec:
+      containers:
+      - name: python
+        image: python3:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: 
+      
+
+      
