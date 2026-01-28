@@ -16,9 +16,9 @@ spec:
   selector:
     matchLabels:
       app: python
-    template:
-      metadata:
-        labels:
+  template:
+    metadata:
+      labels:
           app: python
     spec:
       containers:
