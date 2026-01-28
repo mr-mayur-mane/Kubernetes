@@ -41,7 +41,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: mysql-configmap
-              key: db_url
+              key: db-url
 
 ---
 apiVersion: v1
@@ -59,6 +59,14 @@ spec:
     port: 3000
     targetPort: 3000
 
+---
+apiVersion: v1
+kind: configmap
+metadata:
+  name: mysql-configmap
+  namespace: python-prod
+data:
+  db-url: ######
 
       
 
