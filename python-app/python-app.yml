@@ -50,7 +50,7 @@ metadata:
   name: python-service
   namespace: python-prod
 spec:
-  type: LoadBalance
+  type: LoadBalancer
   selector:
     matchLabels:
       app: python
