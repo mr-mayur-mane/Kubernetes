@@ -93,14 +93,15 @@ spec:
     matchLabels:
       app: mysql-db
   template:
-    spec:
+    metadata:
       labels:
         app: mysql-db
-    containers:
-    - name: mysql
-      image: mysql-8
-      ports:
-      containerPort: 3306 
+    spec:
+      containers:
+      - name: mysql
+        image: mysql-8
+        ports:
+        - containerPort: 3306 
 
 ---
 apiVersion: v1
