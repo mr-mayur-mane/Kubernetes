@@ -109,7 +109,7 @@ kind: Service
 metadata:
   name: mysql-service
   namespace: python-prod
-data:
+spec:
   selector:
     app: mysql-db
   ports:
