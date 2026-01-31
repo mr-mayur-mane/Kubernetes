@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: python
-        image: python3:latest
+        image: python:3.12-slim
         ports:
         - containerPort: 3000
         env:
