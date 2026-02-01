@@ -27,7 +27,7 @@ spec:
   - protocol: TCP
     port: 3306
     targetPort: 3306
-    
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -72,6 +72,21 @@ data:
   db-url: ######
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+  namespace: python-prod
+spec:
+  type: LoadBalancer
+  selector:
+    app: python
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30000
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -110,26 +125,3 @@ spec:
             configMapKeyRef:
               name: mysql-configmap
               key: db-url
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: python-service
-  namespace: python-prod
-spec:
-  type: LoadBalancer
-  selector:
-    app: python
-  ports:
-  - protocol: TCP
-    port: 3000
-    targetPort: 3000
-    nodePort: 30000
-
-  
-
-
-      
-
-      
