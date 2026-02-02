@@ -78,7 +78,6 @@ metadata:
   name: python-service
   namespace: python-prod
 spec:
-  type: LoadBalancer
   selector:
     app: python
   ports:
