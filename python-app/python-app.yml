@@ -11,8 +11,8 @@ metadata:
   namespace: python-prod
 type: Opaque
 data:
-  mysql_user: ####
-  mysql_password: ####
+  mysql_user: qweoiqwdnqwkdn
+  mysql_password: IWDASKNDKASMDdasd
 
 ---
 apiVersion: v1
@@ -86,6 +86,7 @@ spec:
     port: 3000
     targetPort: 3000
     nodePort: 30000
+    
 ---
 apiVersion: apps/v1
 kind: Deployment
