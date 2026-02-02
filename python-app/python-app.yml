@@ -69,7 +69,7 @@ metadata:
   name: mysql-configmap
   namespace: python-prod
 data:
-  db-url: ######
+  db-url: mysql-service
 
 ---
 apiVersion: v1
