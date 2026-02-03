@@ -124,3 +124,18 @@ spec:
             configMapKeyRef:
               name: mysql-configmap
               key: db-url
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: python-Ingress
+  namespace: python-prod
+spec:
+  rules:
+  - hosts: "dashboard.com"
+    http:
+      paths:
+      - backend:
+          service: python-service
+      
