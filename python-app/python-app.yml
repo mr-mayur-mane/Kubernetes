@@ -133,9 +133,13 @@ metadata:
   namespace: python-prod
 spec:
   rules:
-  - hosts: "dashboard.com"
+  - hosts: dashboard.com
     http:
-      paths:
-      - backend:
-          service: python-service
-      
+    paths:
+    - path: /api
+      pathType: Prefix
+      backend:
+        service:
+          name: python-service
+          port:
+            number: 80     
