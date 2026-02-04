@@ -62,6 +62,7 @@ spec:
       containers:
       - name: mysql
         image: mysql:8.0
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3306 
         env:
@@ -75,6 +76,15 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: mysql_password
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+
+      
 ---
 apiVersion: v1
 kind: ConfigMap
