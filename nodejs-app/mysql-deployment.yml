@@ -20,3 +20,10 @@ metadata:
           image: mysql
           ports:
           - containerPort: 3306
+          volumeMounts:
+          - name: mysql-storage
+            mountPath: /var/lib/db
+        volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
