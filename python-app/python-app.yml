@@ -149,6 +149,19 @@ spec:
               key: db-url
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-exec-service
+  namespace: python-prod
+spec:
+  selector:
+    app: python-exec
+  ports:
+  - protocol: TCP
+    port: 4000
+    targetPort 4000
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
