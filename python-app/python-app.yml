@@ -165,27 +165,28 @@ spec:
     metadata:
       labels:
         app: python-exec
-    containers:
-    - name: python-exec
-      image: python:3.12-slim
-      ports:
-      - containerPort: 4000
-      env:
-      - name: DB_USERNAME
+    spec:
+      containers:
+      - name: python-exec
+        image: python:3.12-slim
+        ports:
+        - containerPort: 4000
+        env:
+        - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
               name: mysql-secret
               key: mysql_user
-      - name: DB_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: mysql-secret
-            key: mysql_password
-      - name: DB_URL
-        valueFrom:
-          configMapKeyRef:
-            name: mysql-configmap
-            key: db-url
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql_password
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-configmap
+              key: db-url
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
