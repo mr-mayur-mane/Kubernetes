@@ -217,13 +217,13 @@ spec:
         service:
           name: python-app
           port:
-            number: 80
+            number: 3000
     - path: /app
       pathType: Prefix
       backend:
         service:
           name: python-app
           port:
-            number: 80
+            number: 4000
 
   
