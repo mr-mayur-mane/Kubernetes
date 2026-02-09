@@ -29,3 +29,11 @@ spec:
             secretKeyRef:
               name: mongodb-secret
               value: mongo-root-password
+        volumeMounts:
+        - name: mongo-db-volume
+          mountPath: /var/lib/mongo
+      volumes:
+      - name: mongo-db-volume
+        persistentVolumeClaim:
+          claimName: mongo-db-pvc
+
