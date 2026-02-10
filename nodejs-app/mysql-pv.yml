@@ -9,6 +9,6 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeClaimPolicy: Retain
-  storageClass: manual
+  storageClassName: manual
   hostPath:
     path: /var/lib/mysql
