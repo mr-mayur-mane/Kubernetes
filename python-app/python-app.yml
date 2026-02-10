@@ -17,17 +17,19 @@ data:
 
 ---
 apiVersion: v1
-kind: Service
+kind: PersistentVolume
 metadata:
-  name: mysql-service
+  name: mysql-pv
   namespace: python-prod
 spec:
-  selector:
-    app: mysql-db
-  ports:
-  - protocol: TCP
-    port: 3306
-    targetPort: 3306
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClass: manual
+  hostPath:
+    path: /var/lib/mysql
 
 ---
 apiVersion: v1
@@ -38,9 +40,11 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  storageClass: manual
   resources:
     requests:
       storage: 10Gi 
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -84,6 +88,19 @@ spec:
         persistentVolumeClaim:
           claimName: mysql-pvc
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: python-prod
+spec:
+  selector:
+    app: mysql-db
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
       
 ---
 apiVersion: v1
