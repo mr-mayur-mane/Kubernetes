@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mongo-db-deployment
   namespace: mongo-dev
@@ -32,8 +32,13 @@ spec:
         volumeMounts:
         - name: mongo-db-volume
           mountPath: /var/lib/mongo
-      volumes:
-      - name: mongo-db-volume
-        persistentVolumeClaim:
-          claimName: mongo-db-pvc
+      volumeClaimTemplates:
+      - metadata:
+          name: mysql-storage
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: manual
+          resources:
+            requests:
+              storage: 10Gi
 
