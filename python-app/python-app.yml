@@ -45,6 +45,18 @@ spec:
     requests:
       storage: 10Gi 
 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless
+  namespace: python-prod
+spec:
+  clusterIP: None
+  selector:
+    app: mysql-db
+  ports:
+  - port: 3306
+
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -54,6 +66,7 @@ metadata:
   labels:
     app: mysql-db
 spec:
+  serviceName: mysql-headless
   replicas: 1
   selector:
     matchLabels:
