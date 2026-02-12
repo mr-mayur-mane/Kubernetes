@@ -6,6 +6,7 @@ metadata:
   labels:
     app: mongo-db
 spec:
+  serviceName: mongo-headless
   selector:
     matchLabels:
       app: mongo-db
