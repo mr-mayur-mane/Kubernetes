@@ -96,6 +96,13 @@ spec:
         volumeMounts:
         - name: mysql-storage
           mountPath: /var/lib/mysql
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "250Mi"
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
       volumeClaimTemplates:
       - metadata:
           name: mysql-storage
@@ -182,6 +189,13 @@ spec:
             configMapKeyRef:
               name: mysql-configmap
               key: db-url
+                resources:
+          requests:
+            cpu: "250m"
+            memory: "125Mi"
+          limits:
+            cpu: "500m"
+            memory: "250Mi"
 
 ---
 apiVersion: v1
