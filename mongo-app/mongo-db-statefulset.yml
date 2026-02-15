@@ -30,6 +30,13 @@ spec:
             secretKeyRef:
               name: mongodb-secret
               value: mongo-root-password
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "500Mi"
+          limits:
+            cpu: "500m"
+            memory: "1000Mi"
         volumeMounts:
         - name: mongo-db-volume
           mountPath: /var/lib/mongo
