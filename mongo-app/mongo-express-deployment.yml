@@ -36,6 +36,12 @@ spec:
             configMapKeyRef:
               name: mongo-configmap
               key: database_url
-        
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "500Mi"
+          limits:
+            cpu: "500m"
+            memory: "1000Mi"
           
 
