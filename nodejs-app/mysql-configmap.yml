@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mysql-configmap
-  namespace: nodejs-prod
-data:
-  database_url: mysql-service 
