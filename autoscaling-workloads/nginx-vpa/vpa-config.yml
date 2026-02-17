@@ -4,5 +4,4 @@ metadata:
   name: nginx-vpa
 spec:
   scaleTargetRef:
-    kind: app/v1
-    
+    kind: apps/v1

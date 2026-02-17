@@ -4,7 +4,7 @@ metadata:
   name: nginx-hpa
 spec:
   scaleTargetRef:
-    apiVersion: v1
+    apiVersion: apps/v1
     kind: Deployment
     name: nginx
   minReplicas: 2
