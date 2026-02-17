@@ -4,4 +4,22 @@ metadata:
   name: nginx-vpa
 spec:
   scaleTargetRef:
-    kind: apps/v1
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx
+    namespace: nginx-vpa
+  updatePolicy:
+    updateMode: Recreate
+  resourcePolicy:
+    containerPolicy:
+    - containerName: "nginx"
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 2
+        memory: 2Gi
+      controlledResources:
+      - cpu
+      - memory
+      controlledValues: RequestsAndLimits
