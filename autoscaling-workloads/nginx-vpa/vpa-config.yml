@@ -1,0 +1,8 @@
+apiVersion: autoscaling/v2
+kind: VerticalPodAutoScaler
+metadata:
+  name: nginx-vpa
+spec:
+  scaleTargetRef:
+    kind: app/v1
+    
