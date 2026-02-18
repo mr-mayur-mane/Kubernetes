@@ -7,11 +7,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: nginx
-    namespace: nginx-vpa
   updatePolicy:
     updateMode: Recreate
   resourcePolicy:
-    containerPolicy:
+    containerPolicies:
     - containerName: "nginx"
       minAllowed:
         cpu: 100m
