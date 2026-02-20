@@ -5,8 +5,7 @@ metadata:
   namespace: mongo-dev
 spec:
   selector:
-    matchLabels:
-      app: mongo-db
+    app: mongo-db
     ports:
     - protocol: TCP
       port: 27017
