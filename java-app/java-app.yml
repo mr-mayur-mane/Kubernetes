@@ -12,9 +12,9 @@ metadata:
 type: Opaque
 data:
   mysql-root-password: cGFzc3dvcmQ=
-  
+
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql-StatefulSet
