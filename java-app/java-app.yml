@@ -83,7 +83,16 @@ spec:
             configMapKeyRef:
               name: mysql-configmap
               key: mysql-db 
-      
+      volumeClaimTemplates:
+      - metadata:
+          name: mysql-storage
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: manual
+          resources:
+            requests:
+              storage: 10Gi
+---            
 apiVersion:
 name: Service
 metadata:
