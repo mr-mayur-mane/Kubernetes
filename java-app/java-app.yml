@@ -39,6 +39,8 @@ spec:
     path: /var/lib/mysql
 
 ---
+
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
