@@ -14,6 +14,15 @@ data:
   mysql-root-password: cGFzc3dvcmQ=
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-configmap
+  namespace: java-app
+data:
+  mysql-db: backend
+
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -39,6 +48,10 @@ spec:
           secretKeyRef:
             name: mysql-secret
             key: mysql-root-password
+        - name: MYSQL_DB
+          configMapKeyRef:
+            name: mysql-configmap
+            key: mysql-db 
       
 apiVersion:
 name: Service
