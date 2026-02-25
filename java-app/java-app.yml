@@ -135,3 +135,18 @@ spec:
           configMapKeyRef:
             name: mysql-configmap
             key: mysql-db
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-svc
+  namespace: java-app
+spec:
+  type: LoadBalance
+  selectors:
+    app: java
+  ports:
+  - protocol: TCP
+    ports: 3000
+    targetPort: 3000
