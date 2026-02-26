@@ -167,5 +167,5 @@ spec:
           service:
             name: java-svc
             port:
-              number: 80
+              number: 3000
 
