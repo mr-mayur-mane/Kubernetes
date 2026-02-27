@@ -58,7 +58,7 @@ metadata:
   namespace: java-app
 spec:
   replicas: 2
-  selectors:
+  selector:
     matchLabels:
       app: mysql-db
   template:
