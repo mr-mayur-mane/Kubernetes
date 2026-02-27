@@ -57,7 +57,6 @@ metadata:
   name: mysql-StatefulSet
   namespace: java-app
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: mysql-db
@@ -77,7 +76,7 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: mysql-root-password
-        - name: MYSQL_DB
+        - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
               name: mysql-configmap
@@ -119,21 +118,21 @@ spec:
     matchLabels:
       app: java
   template:
+    metadata:
+      labels:
+        app: java
     spec:
-      metadata:
-        labels:
-          app: java
-    containers:
-    - name: java
-      image: java:latest
-      ports:
-      - containerPort: 3000
-      env:
-      - name: MYSQL_DB
-        valueFrom:
-          configMapKeyRef:
-            name: mysql-configmap
-            key: mysql-db
+      containers:
+      - name: java
+        image: java:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: MYSQL_DB
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-configmap
+              key: mysql-db
 
 ---
 apiVersion: v1
