@@ -66,7 +66,7 @@ spec:
       labels:
         app: mysql-db
     spec:
-      cointainers:
+      containers:
       - name: mysql-db
         image: mysql:8.0
         ports:
