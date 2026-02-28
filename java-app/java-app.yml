@@ -152,10 +152,10 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-wildcard-host
+  name: ingress
 spec:
   rules:
-  - host: "dashboard.abc.com"
+  - host: "dashboard.com"
     http:
       paths:
       - pathType: Prefix
