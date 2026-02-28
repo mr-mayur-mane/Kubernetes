@@ -146,6 +146,7 @@ spec:
     app: java
   ports:
   - protocol: TCP
+    targetPort: 30000
     port: 3000
 
 ---
