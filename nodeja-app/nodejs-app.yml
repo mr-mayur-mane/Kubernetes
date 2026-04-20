@@ -4,4 +4,12 @@ kind: Namespace
 metadata:
   name: nodejs-prod
 
-
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nodejs-configmap
+  namespace: nodejs-prod
+data:
+  DB_USERNAME: "root"
+  DB_PASSWORD: "eW91cl9wYXNzd29yZA=="
