@@ -19,7 +19,12 @@ apiVersion: v1
 kind: Secret
 metadata: 
   name: nodejs-secret
+  namespace: nodejs-prod
 type: Opaque
 data:
   DB_USERNAME: "root"
   DB_PASSWORD: "eW91cl9wYXNzd29yZA=="  
+
+---
+apiVersion: apps/v1
+kind: Deployment
