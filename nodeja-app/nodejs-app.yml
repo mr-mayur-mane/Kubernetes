@@ -45,9 +45,21 @@ spec:
     spec:
       containers:
       - name: nodejs-app
-        image: node-22
+        image: node:22
         ports:
         - cointainerPort: 8888
+        env:
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-config-map
+              value: DB_NAME
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-config-map
+              value: DB_PORT
+              
     
         
 
