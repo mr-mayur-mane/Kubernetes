@@ -59,7 +59,16 @@ spec:
             configMapKeyRef:
               name: nodejs-config-map
               value: DB_PORT
-              
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              value: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              value: DB_PASSWORD
     
         
 
