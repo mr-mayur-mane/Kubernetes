@@ -68,9 +68,4 @@ spec:
           valueFrom:
             secretKeyRef:
               name: nodejs-secret
-              value: DB_PASSWORD
-    
-        
-
-
-
+              value: DB_PASSWORD    
