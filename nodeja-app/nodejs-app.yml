@@ -11,7 +11,7 @@ metadata:
   name: nodejs-config-map
   namespace: nodejs-dev
 data:
-  DB_PORT: 53306
+  DB_PORT: "53306"
   DB_NAME: recon
 
 ---
@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: nodejs-app
-        image: nodejs:22
+        image: node:22
         ports:
         - containerPort: 8888
         env:
