@@ -14,3 +14,14 @@ data:
   DB_PORT: 53306
   DB_NAME: recon
 
+---
+kind: Secret
+apiVersion: v1
+metadata: 
+  name: nodejs-secret
+  namespace: nodejs-dev
+type: Opaque
+data:
+  DB_USER: "root"
+  DB_PASSWORD: FNWIEB32844B=
+  
