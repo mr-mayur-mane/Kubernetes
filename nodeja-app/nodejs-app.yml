@@ -24,4 +24,48 @@ type: Opaque
 data:
   DB_USER: "root"
   DB_PASSWORD: FNWIEB32844B=
-  
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata: 
+  name: nodejs-deployment
+  namespace: nodejs-dev
+  labels:
+    app: nodejs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs-app
+        image: nodejs:22
+        ports:
+        - containerPort: 8888
+        env:
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              value: DB_NAME
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              value: DB_PORT  
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              value: DB_USER           
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              value: DB_PASSWORD
