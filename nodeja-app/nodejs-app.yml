@@ -69,3 +69,23 @@ spec:
             secretKeyRef:
               name: nodejs-secret
               key: DB_PASSWORD
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: nodejs-ingress
+  namespace: nodejs-dev
+spec:
+  rules:
+  - host: dashboard.abc.com 
+    http:
+    paths:
+    - path: /api 
+      pathType: Prefix
+      backend:
+        service:
+          name: python-app
+          port:
+            number: 3000
+
