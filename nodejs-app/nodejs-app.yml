@@ -11,8 +11,8 @@ metadata:
   name: nodejs-config-map
   namespace: nodejs-dev
 data:
-  DB_NAME: "recon"
-  DB_PORT: "3306"
+  DB_PORT: "53306"
+  DB_NAME: recon
 
 ---
 kind: Secret
@@ -22,13 +22,13 @@ metadata:
   namespace: nodejs-dev
 type: Opaque
 data:
-  DB_USERNAME: "app_user"
-  DB_PASSWORD: "cGFzc3dvcmQ="
+  DB_USER: "root"
+  DB_PASSWORD: FNWIEB32844B=
 
 ---
 kind: Deployment
 apiVersion: apps/v1
-metadata:
+metadata: 
   name: nodejs-deployment
   namespace: nodejs-dev
   labels:
@@ -45,9 +45,47 @@ spec:
     spec:
       containers:
       - name: nodejs-app
-        image: node-22
+        image: node:22
         ports:
         - containerPort: 8888
+        env:
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-config-map
+              key: DB_NAME
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-config-map
+              key: DB_PORT  
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: DB_USER           
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: DB_PASSWORD
 
-
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: nodejs-ingress
+  namespace: nodejs-dev
+spec:
+  rules:
+  - host: dashboard.abc.com 
+    http:
+    paths:
+    - path: /api 
+      pathType: Prefix
+      backend:
+        service:
+          name: python-app
+          port:
+            number: 3000
 
