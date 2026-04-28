@@ -71,6 +71,19 @@ spec:
               key: DB_PASSWORD
 
 ---
+kind: service
+apiVersion: v1
+metadata:
+  name: nodejs-service
+  namespace: nodejs-dev
+spec:
+  selector:
+    app: nodejs
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 8888
+---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
