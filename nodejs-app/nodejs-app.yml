@@ -32,21 +32,66 @@ metadata:
   name: nodejs-deployment
   namespace: nodejs-dev
   labels:
-    app: nodejs
+    app: backend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: nodejs
+      app: backend
   template:
     metadata:
       labels:
-        app: nodejs
+        app: backend
     spec:
       containers:
       - name: nodejs-app
         image: node:22
         ports:
+        - containerPort: 8888
+        env:
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-config-map
+              key: DB_NAME
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-config-map
+              key: DB_PORT  
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: DB_USER           
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: DB_PASSWORD
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nextjs-deployment
+  namespace: nodejs-dev
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nextjs-app
+        image: nextjs-frontend:latest
+        ports: 
         - containerPort: 8888
         env:
         - name: DB_NAME
@@ -78,11 +123,13 @@ metadata:
   namespace: nodejs-dev
 spec:
   selector:
-    app: nodejs
+    app: backend
   ports:
   - protocol: TCP
     port: 3000
     targetPort: 8888
+
+
 ---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
