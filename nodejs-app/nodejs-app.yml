@@ -157,7 +157,7 @@ spec:
       pathType: Prefix
       backend:
         service:
-          name: nodejs-service
+          name: nextjs-service
           port:
             number: 3000
     - path: /api
