@@ -12,7 +12,7 @@ metadata:
   namespace: nodejs-dev
 data:
   DB_PORT: "53306"
-  DB_NAME: recon
+  DB_NAME: "recon"
 
 ---
 kind: Secret
@@ -29,7 +29,7 @@ data:
 kind: Deployment
 apiVersion: apps/v1
 metadata: 
-  name: nodejs-deployment
+  name: nodejs-backend-deployment
   namespace: nodejs-dev
   labels:
     app: backend
@@ -74,7 +74,31 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: nextjs-deployment
+  name: nodejs-api-deployment
+  namespace: nodejs-dev
+  labels:
+    app: api
+spec:
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: Jkaninda/simple-api
+        ports:
+        - containerPort: 8090
+
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nextjs-frontent-deployment
   namespace: nodejs-dev
   labels:
     app: frontend
@@ -133,6 +157,19 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: nodejs-api-service
+  namespace: nodejs-dev
+spec:
+  selector:
+    app: api
+  ports:
+  - protocol: TCP
+    port: 8090
+    targetPort: 8090
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: nextjs-service
   namespace: nodejs-dev
 spec:
@@ -160,13 +197,21 @@ spec:
           name: nextjs-service
           port:
             number: 3000
-    - path: /api
+    - path: /backend
       pathType: Prefix
       backend:
         service:
           name: nodejs-service
           port: 
             number: 3000
+    - path: /api
+      pathType: Prefix
+      backend:
+        service:
+          name: nodejs-api-service
+          port:
+            number: 8090
+    
 
 
 
