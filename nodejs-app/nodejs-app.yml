@@ -79,6 +79,7 @@ metadata:
   labels:
     app: api
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: api
@@ -140,7 +141,7 @@ spec:
               key: DB_PASSWORD
 
 ---
-kind: service
+kind: Service
 apiVersion: v1
 metadata:
   name: nodejs-service
