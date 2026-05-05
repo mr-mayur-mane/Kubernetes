@@ -22,7 +22,7 @@ metadata:
   namespace: nodejs-dev
 type: Opaque
 data:
-  DB_USER: "root"
+  DB_USER: root
   DB_PASSWORD: FNWIEB32844B=
 
 ---
