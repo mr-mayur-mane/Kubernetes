@@ -97,8 +97,8 @@ spec:
 ---
 kind: HorizontalPodAutoscaler
 apiVersion: autoscaling/v2
-metadata:
-  name: frontend-deployment-vpa
+metadata:ori
+  name: frontend-deployment-hpa
   namespace: nodejs-dev
 spec:
   scaleTargetRef:
