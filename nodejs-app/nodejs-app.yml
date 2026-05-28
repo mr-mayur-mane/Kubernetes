@@ -21,7 +21,7 @@ metadata:
   name: nodejs-secret
   namespace: nodejs-dev
 type: Opaque
-data:
+stringData:
   DB_USER: root
   DB_PASSWORD: FNWIEB32844B=
 
@@ -100,7 +100,7 @@ apiVersion: autoscaling/v2
 metadata:
   name: frontend-deployment-hpa
   namespace: nodejs-dev
-spec:
+stringSpec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
@@ -122,7 +122,7 @@ metadata:
   namespace: nodejs-dev
   labels:
     app: frontend
-spec:
+stringSpec:
   replicas: 2
   selector:
     matchLabels:
