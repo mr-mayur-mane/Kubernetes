@@ -91,13 +91,13 @@ spec:
             requests:
               storage: 10Gi
 ---            
-apiVersion:
-name: Service
+apiVersion: v1
+kind: Service
 metadata:
   name: mysql-svc
   namespace: java-app
 spec:
-  selectors:
+  selector:
     app: mysql-db
   ports:
   - protocol: TCP
@@ -114,7 +114,7 @@ metadata:
     app: java
 spec:
   replicas: 2
-  selectors:
+  selector:
     matchLabels:
       app: java
   template:
