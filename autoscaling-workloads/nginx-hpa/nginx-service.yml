@@ -4,7 +4,7 @@ metadata:
   name: nginx-svc
 spec:
   type: NodePort
-  selectors:
+  selector:
     name: nginx
   ports:
   - protocol: TCP
