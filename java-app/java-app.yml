@@ -54,42 +54,47 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-StatefulSet
+  name: mysql-statefulset
   namespace: java-app
 spec:
   selector:
     matchLabels:
       app: mysql-db
+
+  serviceName: mysql-svc
+
   template:
     metadata:
       labels:
         app: mysql-db
     spec:
       containers:
-      - name: mysql-db
-        image: mysql:8.0
-        ports:
-        - containerPort: 3306
-        env: 
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: mysql-root-password
-        - name: MYSQL_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: mysql-configmap
-              key: mysql-db 
-      volumeClaimTemplates:
-      - metadata:
-          name: mysql-storage
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          storageClassName: manual
-          resources:
-            requests:
-              storage: 10Gi
+        - name: mysql-db
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-root-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configmap
+                  key: mysql-db
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: manual
+        resources:
+          requests:
+            storage: 10Gi
 ---            
 apiVersion: v1
 kind: Service
