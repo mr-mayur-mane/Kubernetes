@@ -4,9 +4,9 @@ metadata:
   name: mongo-pvc
   namespace: mongo-dev
 spec:
-  accessModes:
+  accessMode:
   - ReadWriteOnce
   storageClassName: manual
   resources:
     requests:
-      storage: 10Gi
+      capacity: 5Gi
