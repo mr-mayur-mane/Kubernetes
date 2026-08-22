@@ -1,52 +1,62 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongo-db-deployment
+  name: mongo-db-statefulset
   namespace: mongo-dev
   labels:
     app: mongo-db
+
 spec:
   serviceName: mongo-headless
+
   selector:
     matchLabels:
       app: mongo-db
+
   template:
     metadata:
-      app: mongo-db
+      labels:
+        app: mongo-db
+
     spec:
       containers:
-      - name: mongo-db
-        image: mongo
-        ports:
-        - containerPort: 27017
-        env:
-        - name: MONGO_INITDB_ROOT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mongodb-secret
-              key: mongo-root-username
-        - name: MONGO_INITDB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongodb-secret
-              key: mongo-root-password
-        resources:
-          requests:
-            cpu: "250m"
-            memory: "500Mi"
-          limits:
-            cpu: "500m"
-            memory: "1000Mi"
-        volumeMounts:
-        - name: mongo-db-volume
-          mountPath: /var/lib/mongo
-      volumeClaimTemplates:
-      - metadata:
-          name: mysql-storage
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          storageClassName: manual
+        - name: mongo-db
+          image: mongo
+          ports:
+            - containerPort: 27017
+
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-username
+
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-password
+
           resources:
             requests:
-              storage: 10Gi
+              cpu: "250m"
+              memory: "500Mi"
+            limits:
+              cpu: "500m"
+              memory: "1000Mi"
 
+          volumeMounts:
+            - name: mongo-db-volume
+              mountPath: /data/db
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-db-volume
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: manual
+        resources:
+          requests:
+            storage: 10Gi
