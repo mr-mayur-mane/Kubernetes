@@ -36,6 +36,10 @@ spec:
             configMapKeyRef:
               name: mongo-configmap
               key: database_url
+
+        - name: ME_CONFIG_MONGODB_URL
+          value: mongodb://mongo-db-service:27017
+          
         - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
           value: "true"
         resources:
