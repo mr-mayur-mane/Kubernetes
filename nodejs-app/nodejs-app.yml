@@ -90,7 +90,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: Jkaninda/simple-api
+        image: node:22-alphine
         ports:
         - containerPort: 8090
 
