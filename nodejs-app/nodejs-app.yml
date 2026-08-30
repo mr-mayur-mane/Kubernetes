@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: nodejs-app
-        image: node:22
+        image: node:22-alphine
         ports:
         - containerPort: 8888
         env:
