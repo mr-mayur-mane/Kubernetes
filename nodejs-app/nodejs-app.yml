@@ -100,7 +100,7 @@ apiVersion: autoscaling/v2
 metadata:
   name: frontend-deployment-hpa
   namespace: nodejs-dev
-stringSpec:
+spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
