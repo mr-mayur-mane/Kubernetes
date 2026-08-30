@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: nodejs-app
-        image: node:alphine
+        image: node:alpine
         ports:
         - containerPort: 8888
         env:
@@ -90,7 +90,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: node:alphine
+        image: node:alpine
         ports:
         - containerPort: 8090
 
