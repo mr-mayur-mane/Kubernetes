@@ -1,78 +1,241 @@
+
 ---
-kind: Namespace
+# ============================================================
+# Namespace
+# ============================================================
+
 apiVersion: v1
+kind: Namespace
 metadata:
   name: nodejs-dev
 
 ---
-kind: ConfigMap
+# ============================================================
+# ConfigMap
+# ============================================================
+
 apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: nodejs-config-map
+  name: nodejs-config
   namespace: nodejs-dev
 data:
-  DB_PORT: "53306"
+  DB_HOST: "mysql-service"
+  DB_PORT: "3306"
   DB_NAME: "recon"
 
 ---
-kind: Secret
+# ============================================================
+# Secret
+# ============================================================
+
 apiVersion: v1
-metadata: 
+kind: Secret
+metadata:
   name: nodejs-secret
   namespace: nodejs-dev
 type: Opaque
 stringData:
-  DB_USER: root
-  DB_PASSWORD: FNWIEB32844B=
+  DB_USER: "root"
+  DB_PASSWORD: "FNWIEB32844="
 
 ---
-kind: Deployment
+# ============================================================
+# MySQL PVC
+# ============================================================
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: nodejs-dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+# ============================================================
+# MySQL Deployment
+# ============================================================
+
 apiVersion: apps/v1
-metadata: 
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  namespace: nodejs-dev
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.4
+          ports:
+            - containerPort: 3306
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nodejs-secret
+                  key: DB_PASSWORD
+
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: nodejs-config
+                  key: DB_NAME
+
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+
+---
+# ============================================================
+# MySQL Service
+# ============================================================
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: nodejs-dev
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+---
+# ============================================================
+# Backend Deployment
+# ============================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: nodejs-backend-deployment
   namespace: nodejs-dev
   labels:
     app: backend
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: backend
+
   template:
     metadata:
       labels:
         app: backend
+
     spec:
       containers:
-      - name: nodejs-app
-        image: node:alpine
-        ports:
-        - containerPort: 8888
-        env:
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: nodejs-config-map
-              key: DB_NAME
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: nodejs-config-map
-              key: DB_PORT  
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: nodejs-secret
-              key: DB_USER           
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: nodejs-secret
-              key: DB_PASSWORD
+        - name: backend
+          image: hashicorp/http-echo:latest
+
+          args:
+            - "-listen=:8080"
+            - "-text=Hello from NodeJS Backend"
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: nodejs-config
+                  key: DB_HOST
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: nodejs-config
+                  key: DB_PORT
+
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: nodejs-config
+                  key: DB_NAME
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: nodejs-secret
+                  key: DB_USER
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nodejs-secret
+                  key: DB_PASSWORD
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "128Mi"
 
 ---
-kind: Deployment
+# ============================================================
+# Backend Service
+# ============================================================
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-service
+  namespace: nodejs-dev
+spec:
+  type: ClusterIP
+
+  selector:
+    app: backend
+
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 8080
+
+---
+# ============================================================
+# API Deployment
+# ============================================================
+
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: nodejs-api-deployment
   namespace: nodejs-dev
@@ -80,165 +243,189 @@ metadata:
     app: api
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: api
+
   template:
     metadata:
       labels:
         app: api
+
     spec:
       containers:
-      - name: api
-        image: node:alpine
-        ports:
-        - containerPort: 8090
+        - name: api
+          image: hashicorp/http-echo:latest
+
+          args:
+            - "-listen=:8090"
+            - "-text=Hello from NodeJS API"
+
+          ports:
+            - containerPort: 8090
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "128Mi"
 
 ---
-kind: HorizontalPodAutoscaler
-apiVersion: autoscaling/v2
+# ============================================================
+# API Service
+# ============================================================
+
+apiVersion: v1
+kind: Service
 metadata:
-  name: frontend-deployment-hpa
+  name: nodejs-api-service
   namespace: nodejs-dev
 spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: nextjs-frontent-deployment
-  minReplicas: 2
-  maxReplicas: 8
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 50
+  type: ClusterIP
+
+  selector:
+    app: api
+
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8090
+
 ---
-kind: Deployment
+# ============================================================
+# Frontend Deployment
+# ============================================================
+
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: nextjs-frontent-deployment
+  name: frontend-deployment
   namespace: nodejs-dev
   labels:
     app: frontend
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: frontend
+
   template:
     metadata:
       labels:
         app: frontend
+
     spec:
       containers:
-      - name: nextjs-app
-        image: vulhub/nextjs:15.5.6
-        ports: 
-        - containerPort: 8888
-        env:
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: nodejs-config-map
-              key: DB_NAME
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: nodejs-config-map
-              key: DB_PORT  
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: nodejs-secret
-              key: DB_USER           
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: nodejs-secret
-              key: DB_PASSWORD
-        resources:
-          requests:
-            cpu: "200m"
-            memory: "256Mi"
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
+        - name: frontend
+          image: nginxdemos/hello:latest
+
+          ports:
+            - containerPort: 80
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "128Mi"
 
 ---
-kind: Service
-apiVersion: v1
-metadata:
-  name: nodejs-service
-  namespace: nodejs-dev
-spec:
-  selector:
-    app: backend
-  ports:
-  - protocol: TCP
-    port: 3000
-    targetPort: 8888
+# ============================================================
+# Frontend Service
+# ============================================================
 
----
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: nodejs-api-service
+  name: frontend-service
   namespace: nodejs-dev
 spec:
-  selector:
-    app: api
-  ports:
-  - protocol: TCP
-    port: 8090
-    targetPort: 8090
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: nextjs-service
-  namespace: nodejs-dev
-spec:
+  type: ClusterIP
+
   selector:
     app: frontend
+
   ports:
-  - protocol: TCP
-    port: 3000
-    targetPort: 8888
+    - protocol: TCP
+      port: 3000
+      targetPort: 80
+
 ---
-kind: Ingress
+# ============================================================
+# Frontend HPA
+# ============================================================
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontend-hpa
+  namespace: nodejs-dev
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend-deployment
+
+  minReplicas: 2
+  maxReplicas: 8
+
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+
+---
+# ============================================================
+# Ingress
+# ============================================================
+
 apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: nodejs-ingress
   namespace: nodejs-dev
+
 spec:
+  ingressClassName: nginx
+
   rules:
-  - host: abc.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nextjs-service
-            port:
-              number: 3000
-      - path: /backend
-        pathType: Prefix
-        backend:
-          service:
-            name: nodejs-service
-            port: 
-              number: 3000
-      - path: /api
-        pathType: Prefix
-        backend:
-          service:
-            name: nodejs-api-service
-            port:
-              number: 8090
-    
+    - host: abc.com
 
+      http:
+        paths:
 
+          # Frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 3000
+
+          # Backend
+          - path: /backend
+            pathType: Prefix
+            backend:
+              service:
+                name: nodejs-service
+                port:
+                  number: 3000
+
+          # API
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: nodejs-api-service
+                port:
+                  number: 8090
 
